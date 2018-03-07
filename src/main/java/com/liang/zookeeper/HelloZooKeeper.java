@@ -12,7 +12,7 @@ public class HelloZooKeeper {
     //实例常量
     private static final String CONNECT_STRING = "127.0.0.1:2181";
     private static final String PATH = "/Java_ZooKeeper";
-    private static final int SESSION_TIMEOUT=50*1000;
+    private static final int SESSION_TIMEOUT = 50 * 1000;
 
     public ZooKeeper startZK() throws IOException {
         return new ZooKeeper(CONNECT_STRING, SESSION_TIMEOUT, new Watcher() {
@@ -22,18 +22,18 @@ public class HelloZooKeeper {
     }
 
     public void stopZK(ZooKeeper zooKeeper) throws InterruptedException {
-        if (zooKeeper != null){
+        if (zooKeeper != null) {
             zooKeeper.close();
         }
     }
 
     //创建一个持久化的目录节点
-    public void createZNode(ZooKeeper zooKeeper,String nodePath,String nodeValue) throws KeeperException, InterruptedException {
-        zooKeeper.create(nodePath,nodeValue.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+    public void createZNode(ZooKeeper zooKeeper, String nodePath, String nodeValue) throws KeeperException, InterruptedException {
+        zooKeeper.create(nodePath, nodeValue.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
     }
 
     //获取到指定path下的目录节点的value
-    public String getZNode(ZooKeeper zooKeeper,String nodePath) throws KeeperException, InterruptedException {
+    public String getZNode(ZooKeeper zooKeeper, String nodePath) throws KeeperException, InterruptedException {
         String retValue = null;
         byte[] bytes = zooKeeper.getData(nodePath, false, new Stat());
         retValue = new String(bytes);
@@ -46,13 +46,13 @@ public class HelloZooKeeper {
 
         ZooKeeper zooKeeper = helloZooKeeper.startZK();
 
-        if (zooKeeper.exists(PATH,false) == null){
-            helloZooKeeper.createZNode(zooKeeper,PATH,"zookeeper01");
+        if (zooKeeper.exists(PATH, false) == null) {
+            helloZooKeeper.createZNode(zooKeeper, PATH, "zookeeper01");
 
             String result = helloZooKeeper.getZNode(zooKeeper, PATH);
 
-            logger.debug("********* helloZooKeeper result: "+result);
-        }else{
+            logger.debug("********* helloZooKeeper result: " + result);
+        } else {
             logger.debug("********* this node is already exist");
         }
 
