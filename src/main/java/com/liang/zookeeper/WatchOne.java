@@ -37,12 +37,15 @@ public class WatchOne {
     /**
      * getZNode方法后,在/Java_ZooKeeper这个ZNode节点上设置一个watcher,只要当前节点变化后通知Client
      * 异步回调的触发机制: 当数据有了变化时zkserver向客户端发送一个watch,它是一次性的动作，即触发一次就不再有效,
-     * 如果想继续Watch的话，需要客户端重新设置Watcher
+     *                   如果想继续Watch的话，需要客户端重新设置Watcher
+     *
      * @param nodePath
      * @return
      */
     public String getZNode(final String nodePath) throws KeeperException, InterruptedException {
         String retValue = null;
+
+        //Zookeeper里的所有读取操作：getData(),getChildren()和exists()都有设置watch的选项
         byte[] bytes = zooKeeper.getData(nodePath, new Watcher() {
             public void process(WatchedEvent watchedEvent) {
                 try {
@@ -65,7 +68,7 @@ public class WatchOne {
         byte[] bytes = zooKeeper.getData(nodePath, false, new Stat());
         retValue = new String(bytes);
 
-        logger.debug("********************triggerValue:"+retValue);
+        logger.debug("********************triggerValue:" + retValue);
     }
 
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
@@ -73,9 +76,9 @@ public class WatchOne {
         ZooKeeper zooKeeper = watchOne.startZK();
         watchOne.setZooKeeper(zooKeeper);
 
-        if (watchOne.getZooKeeper().exists(PATH,false)==null){
-            watchOne.createZNOde(PATH,"Watcher");
-            logger.debug("*************main result:"+watchOne.getZNode(PATH));
+        if (watchOne.getZooKeeper().exists(PATH, false) == null) {
+            watchOne.createZNOde(PATH, "Watcher");
+            logger.debug("*************main result:" + watchOne.getZNode(PATH));
         }
         Thread.sleep(Long.MAX_VALUE);
     }
