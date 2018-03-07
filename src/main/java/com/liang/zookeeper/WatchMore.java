@@ -34,6 +34,13 @@ public class WatchMore {
         });
     }
 
+    /**
+     * 通过getZNode方法后，在/Java_ZooKeeper 这个Znode上设置一个watcher，只要当前节点变化后通知Client
+     * @param nodePath
+     * @return
+     * @throws KeeperException
+     * @throws InterruptedException
+     */
     public String getZNode(final String nodePath) throws KeeperException, InterruptedException {
         String retValue = null;
 
